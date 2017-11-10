@@ -11,30 +11,32 @@ try {
     $detail      = $taskconnection->real_escape_string($_REQUEST["detailtask"]);
     $userid      = $taskconnection->real_escape_string($_REQUEST["userid"]);
     $kendaraanid = $taskconnection->real_escape_string($_REQUEST["kendaraanid"]);
+    $supir       = $taskconnection->real_escape_string($_REQUEST["supir"]);
 
-    if (isset($_REQUEST["useronduty"])) {
-        $useronduty = $taskconnection->real_escape_string($_REQUEST["useronduty"]);
-        $useronduty = str_replace('\\', '', $useronduty);
-    }
+//    if (isset($_REQUEST["useronduty"])) {
+//        $useronduty = $taskconnection->real_escape_string($_REQUEST["useronduty"]);
+//        $useronduty = str_replace('\\', '', $useronduty);
+//    }
     if (isset($_REQUEST["tujuan"])) {
         $tujuan = $taskconnection->real_escape_string($_REQUEST["tujuan"]);
         $tujuan = str_replace('\\', '', $tujuan);
     }
-
     
-    $myJsonPekerja = json_decode($useronduty);
+    //$myJsonPekerja = json_decode($useronduty);
     $myJsonTujuan = json_decode($tujuan);
 
 
-    if (count($myJsonPekerja) <= 0) {
-        $data = ['status' => "failed", 'message' => 'Silahkan pilih petugas yang akan ditugaskan.'];
+    if (count($myJsonTujuan) <= 0) {
+        $data = ['status' => "failed", 'message' => 'Silahkan pilih tujuan yang akan dituju.'];
         $noError = false;
-    } else {
-        if (count($myJsonTujuan) <= 0) {
-            $data = ['status' => "failed", 'message' => 'Silahkan pilih tujuan yang akan dituju.'];
-            $noError = false;
-        }
     }
+        
+//    if (count($myJsonPekerja) <= 0) {
+//        $data = ['status' => "failed", 'message' => 'Silahkan pilih petugas yang akan ditugaskan.'];
+//        $noError = false;
+//    } else {
+//        
+//    }
     
     
     if ($noError) {
@@ -46,8 +48,8 @@ try {
             $taskid = $taskconnection->insert_id;
             $taskkendaraanid = 0;
             
-            $SQLTASKKENDARAAN = "INSERT INTO taskkendaraan (taskid, kendaraanid)
-                                 VALUES ('$taskid', '$kendaraanid')";
+            $SQLTASKKENDARAAN = "INSERT INTO taskkendaraan (taskid, kendaraanid, userid)
+                                 VALUES ('$taskid', '$kendaraanid', '$supir')";
                                  
            
             if (mysqli_query($taskconnection, $SQLTASKKENDARAAN)) {
@@ -61,11 +63,11 @@ try {
                 }
 
                 ## Tambahkan Pekerja
-                foreach ($myJsonPekerja as $value) {
-                    $SQLPEKERJA = "INSERT INTO pekerja (taskkendaraanid, userid, status)
-                                   VALUES ('$taskkendaraanid', '$value->iduser', '$value->status')";
-                    $taskconnection->query($SQLPEKERJA);
-                }
+//                foreach ($myJsonPekerja as $value) {
+//                    $SQLPEKERJA = "INSERT INTO pekerja (taskkendaraanid, userid, status)
+//                                   VALUES ('$taskkendaraanid', '$value->iduser', '$value->status')";
+//                    $taskconnection->query($SQLPEKERJA);
+//                }
                 
                 ## Commit transaction
                 mysqli_commit($taskconnection);
