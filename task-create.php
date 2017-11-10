@@ -46,10 +46,11 @@ try {
             $taskid = $taskconnection->insert_id;
             $taskkendaraanid = 0;
             
-            $SQLTASKKENDARAAN = "INSERT INTO TaskKendaraan (taskid, kendaraanid)
+            $SQLTASKKENDARAAN = "INSERT INTO taskkendaraan (taskid, kendaraanid)
                                  VALUES ('$taskid', '$kendaraanid')";
-            
-            if (mysqli_query($taskconnection, $SQLTASK)) {
+                                 
+           
+            if (mysqli_query($taskconnection, $SQLTASKKENDARAAN)) {
                 $taskkendaraanid = $taskconnection->insert_id;
                 
                 ## Tambahkan Tujuan Task
