@@ -21,7 +21,9 @@ try {
     ## Array Declare
     $arrResult = array();
     $arrPekerja = array();
+    $arrTodoList = array();
     $arrPengerjaan = array();
+    $arrAbsensi = array();
     $totalPekerja = 0;
 
     $sql  = "Select t.id as id, 
@@ -93,7 +95,33 @@ try {
                             'longitude' => $row['longitude'],
                             'status' => $row['status']
                         ];
-                        array_push($arrPengerjaan, $data);
+                        array_push($arrTodoList, $data);
+
+                    }
+                }
+                
+                ## Ambil data absensi
+                $sql = "SELECT id, id_user, taskid, longitude, latitude, lokasi, filename, tanggal, tipe
+                            FROM absensi 
+                            WHERE taskid = '$id'";
+                $sql .= " ORDER BY tipe ASC;";
+
+                $result = $con->query($sql);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $data = [
+                            'id' => $row['id'],
+                            'iduser' => $row['id_user'],
+                            'idtask' => $id,
+                            'lokasi' => $row['lokasi'],
+                            'latitude' => $row['latitude'],
+                            'longitude' => $row['longitude'],
+                            'tanggal' => $row['tanggal'],
+                            'tipe' => $row['tipe'],
+                            'fileupload' => $_SERVER['SERVER_NAME'] . "\\" . "uploads" . "\\" . $row['filename']
+                        ];
+                        array_push($arrAbsensi, $data);
 
                     }
                 }
@@ -103,7 +131,9 @@ try {
         $data = ['status' => "succeeded",
             'message' => 'Detail Task berhasil didapatkan.',
             'Data' => $arrResult,
-            'Detail' => $arrPengerjaan
+            'Detail' => $arrTodoList,
+            'HasilPengerjaan' => $arrPengerjaan,
+            'Absensi' => $arrAbsensi,
         ];
     } else {
         $data = ['status' => "failed", 'message' => 'Detail Task gagal didapatkan.'];
