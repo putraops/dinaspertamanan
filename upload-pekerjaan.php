@@ -6,6 +6,9 @@ try {
 
     $taskiddetail = $con->real_escape_string($_REQUEST["taskiddetail"]);
     $userid = $con->real_escape_string($_REQUEST["userid"]);
+    $latitude = $con->real_escape_string($_REQUEST["latitude"]);
+    $longitude = $con->real_escape_string($_REQUEST["longitude"]);
+    $lokasi = $con->real_escape_string($_REQUEST["lokasi"]);
 
     $target_dir = "uploads/";
 
@@ -18,15 +21,15 @@ try {
     
     $ext = "." . pathinfo($_FILES["filename"]["name"], PATHINFO_EXTENSION);
 
-    $targetfilename = "pengeluaran-" . date("Y-m-d-h-i-s") . $ext;
+    $targetfilename = "pengerjaan-" . date("Y-m-d-h-i-s") . $ext;
 
     if (isset($_FILES["filename"])) {
         if (move_uploaded_file($_FILES["filename"]["tmp_name"], $targetfilename)) {
             ## Berhasil upload
             #
             ## INSERT PEKERJAAN
-            $sql = " INSERT INTO pengerjaan (taskiddetail, userid, filename, created_at, updated_at)
-                        VALUES ('$taskiddetail', '$userid', '$targetfilename', now(), now())";
+            $sql = " INSERT INTO pengerjaan (taskiddetail, userid, filename, latitude, longitude, lokasi, created_at, updated_at)
+                        VALUES ('$taskiddetail', '$userid', '$targetfilename', '$latitude', '$longitude', '$lokasi', now(), now())";
 
             if (mysqli_query($con, $sql)) {
                 $data = ['status' => "Succeeded", 'message' => 'Pengeluaran berhasil ditambahkan.'];

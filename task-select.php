@@ -96,7 +96,6 @@ try {
                             'status' => $row['status']
                         ];
                         array_push($arrTodoList, $data);
-
                     }
                 }
                 
