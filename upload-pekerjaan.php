@@ -21,14 +21,14 @@ try {
     
     $ext = "." . pathinfo($_FILES["filename"]["name"], PATHINFO_EXTENSION);
 
-    $targetfilename = "pengerjaan-" . date("Y-m-d-h-i-s") . $ext;
+    $targetfilename = target_dir . "pengerjaan-" . date("Y-m-d-h-i-s") . $ext;
 
     if (isset($_FILES["filename"])) {
         if (move_uploaded_file($_FILES["filename"]["tmp_name"], $targetfilename)) {
             ## Berhasil upload
             #
             ## INSERT PEKERJAAN
-            $sql = " INSERT INTO pengerjaan (taskiddetail, userid, filename, latitude, longitude, lokasi, created_at, updated_at)
+            $sql = " INSERT INTO pengerjaan (taskdetailid, userid, filename, latitude, longitude, lokasi, created_at, updated_at)
                         VALUES ('$taskiddetail', '$userid', '$targetfilename', '$latitude', '$longitude', '$lokasi', now(), now())";
 
             if (mysqli_query($con, $sql)) {
